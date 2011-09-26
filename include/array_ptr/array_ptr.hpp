@@ -20,6 +20,9 @@
  * along with array_ptr.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __ARRAY_PTR_HPP
+#define __ARRAY_PTR_HPP
+
 #include <cstdlib>
 
 namespace array_ptr
@@ -29,53 +32,63 @@ namespace array_ptr
   {
   private:
     T *values;
-    std::size_t size;
+    std::size_t _size;
 
   public:
+    typedef T value_type;
+
+    typedef T* iterator;
+    typedef const T* const_iterator;
+
     inline array_ptr(T *values = NULL, std::size_t size = 0) :
       values(values),
-      size(size)
+      _size(size)
     {}
 
-    inline array_ptr(const std::vector<T> &values) :
+    inline array_ptr(std::vector<T> &values) :
       values(&values[0]),
-      size(values.size())
+      _size(values.size())
     {}
 
     template<std::size_t SIZE>
-    inline array_ptr(const boost::array<T, SIZE> &values) :
+    inline array_ptr(boost::array<T, SIZE> &values) :
       values(values.c_array()),
-      size(SIZE)
+      _size(SIZE)
     {}
 
-    inline array_ptr(const boost::tuple<T, size_t> &values_and_size) :
-      values(values_and_size.get<0>()),
-      size(values_and_size.get<1>())
+    inline array_ptr(const boost::tuple<T*, size_t> &values_and_size) :
+      values(values_and_size.template get<0>()),
+      _size(values_and_size.template get<1>())
     {}
+
+    inline void reset(const array_ptr<T> &values)
+    {
+      *this = values;
+    }
 
     inline void reset(T *values = NULL, std::size_t size = 0)
     {
       this->values = values;
-      this->size = size;
+      this->_size = size;
     }
 
-    inline void reset(const std::vector<T> &values)
+    inline void reset(std::vector<T> &values)
     {
       this->values = &values[0];
-      this->size = values.size();
+      this->_size = values.size();
     }
 
     template<std::size_t SIZE>
-    inline void reset(const boost::array<T, SIZE> &values)
+    inline void reset(boost::array<T, SIZE> &values)
     {
       this->values = values.c_array();
-      this->size = SIZE;
+      this->_size = SIZE;
     }
 
     inline void reset(const boost::tuple<T, size_t> &values_and_size)
     {
-      this->values = values_and_size.get<0>();
-      this->size = values_and_size.get<1>();
+      this->values = values_and_size.template get<0>();
+      this->_size = values_and_size.template get<1>();
     }
 
     inline T* get()
@@ -110,7 +123,31 @@ namespace array_ptr
 
     inline std::size_t size() const
     {
-      return this->size;
+      return this->_size;
+    }
+
+    inline iterator begin()
+    {
+      return iterator(this->values);
+    }
+
+    inline iterator end()
+    {
+      return iterator(this->values + this->_size);
+    }
+
+    inline const_iterator cbegin()
+    {
+      return const_iterator(this->values);
+    }
+
+    inline const_iterator cend()
+    {
+      return const_iterator(this->values + this->_size);
     }
   };
 }
+
+#include "const_array_ptr.hpp"
+
+#endif
