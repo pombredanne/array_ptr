@@ -45,6 +45,11 @@ namespace array_ptr
       _size(size)
     {}
 
+    inline array_ptr(array_ptr<T> &values) :
+      values(values.values),
+      _size(values._size)
+    {}
+
     inline array_ptr(std::vector<T> &values) :
       values(&values[0]),
       _size(values.size())
@@ -61,7 +66,7 @@ namespace array_ptr
       _size(values_and_size.template get<1>())
     {}
 
-    inline void reset(const array_ptr<T> &values)
+    inline void reset(array_ptr<T> &values)
     {
       *this = values;
     }
@@ -136,12 +141,22 @@ namespace array_ptr
       return iterator(this->values + this->_size);
     }
 
-    inline const_iterator cbegin()
+    inline const_iterator begin() const
     {
       return const_iterator(this->values);
     }
 
-    inline const_iterator cend()
+    inline const_iterator end() const
+    {
+      return const_iterator(this->values + this->_size);
+    }
+
+    inline const_iterator cbegin() const
+    {
+      return const_iterator(this->values);
+    }
+
+    inline const_iterator cend() const
     {
       return const_iterator(this->values + this->_size);
     }
