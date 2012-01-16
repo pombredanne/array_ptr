@@ -20,10 +20,15 @@
  * along with array_ptr.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __ARRAY_PTR_HPP
-#define __ARRAY_PTR_HPP
+#ifndef __STZ_ARRAY_PTR_HPP
+#define __STZ_ARRAY_PTR_HPP
 
 #include <cstdlib>
+
+#include <vector>
+
+#include <boost/array.hpp>
+#include <boost/tuple/tuple.hpp>
 
 namespace stz
 {
@@ -164,7 +169,5 @@ namespace stz
     }
   };
 }
-
-#include "const_array_ptr.hpp"
 
 #endif

@@ -20,8 +20,8 @@
  * along with array_ptr.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __CONST_ARRAY_PTR_HPP
-#define __CONST_ARRAY_PTR_HPP
+#ifndef __STZ_CONST_ARRAY_PTR_HPP
+#define __STZ_CONST_ARRAY_PTR_HPP
 
 #include "array_ptr.hpp"
 
