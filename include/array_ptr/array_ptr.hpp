@@ -25,7 +25,7 @@
 
 #include <cstdlib>
 
-namespace array_ptr
+namespace stz
 {
   template<typename T>
   class array_ptr

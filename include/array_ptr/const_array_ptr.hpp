@@ -25,7 +25,7 @@
 
 #include "array_ptr.hpp"
 
-namespace array_ptr
+namespace stz
 {
   template<typename T>
   class const_array_ptr : public array_ptr<const T>
