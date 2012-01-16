@@ -31,6 +31,10 @@ namespace array_ptr
   class const_array_ptr : public array_ptr<const T>
   {
   public:
+    inline const_array_ptr(const T *values = NULL, std::size_t size = 0) :
+      array_ptr<const T>(values, size)
+    {}
+
     inline const_array_ptr(const array_ptr<T> &values) :
       array_ptr<const T>(values.get(), values.size())
     {}
@@ -43,6 +47,24 @@ namespace array_ptr
     inline const_array_ptr(const boost::array<T, SIZE> &values) :
       array_ptr<const T>(values.data(), SIZE)
     {}
+
+    template<typename S>
+    inline const_array_ptr(const boost::tuple<T*, S> &values_and_size) :
+      array_ptr<const T>(values_and_size.template get<0>(),
+                         values_and_size.template get<1>())
+    {}
+
+    template<typename S>
+    inline const_array_ptr
+    (const boost::tuple<const T*, S> &values_and_size) :
+
+      array_ptr<const T>(values_and_size)
+    {}
+
+    inline void reset(const T *values = NULL, std::size_t size = 0)
+    {
+      this->array_ptr<const T>::reset(values, size);
+    }
 
     inline void reset(const array_ptr<T> &values)
     {
@@ -58,6 +80,20 @@ namespace array_ptr
     inline void reset(const boost::array<T, SIZE> &values)
     {
       this->array_ptr<const T>::reset(values.data(), SIZE);
+    }
+
+    template<typename S>
+    inline void reset(const boost::tuple<T*, S> &values_and_size)
+    {
+      this->array_ptr<const T>::reset
+        (values_and_size.template get<0>(),
+         values_and_size.template get<1>());
+    }
+
+    template<typename S>
+    inline void reset(const boost::tuple<const T*, S> &values_and_size)
+    {
+      this->array_ptr<const T>::reset(values_and_size);
     }
   };
 }
