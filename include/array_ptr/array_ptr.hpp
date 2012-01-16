@@ -61,7 +61,8 @@ namespace array_ptr
       _size(SIZE)
     {}
 
-    inline array_ptr(const boost::tuple<T*, size_t> &values_and_size) :
+    template<typename S>
+    inline array_ptr(const boost::tuple<T*, S> &values_and_size) :
       values(values_and_size.template get<0>()),
       _size(values_and_size.template get<1>())
     {}
@@ -90,7 +91,8 @@ namespace array_ptr
       this->_size = SIZE;
     }
 
-    inline void reset(const boost::tuple<T, size_t> &values_and_size)
+    template<typename S>
+    inline void reset(const boost::tuple<T*, S> &values_and_size)
     {
       this->values = values_and_size.template get<0>();
       this->_size = values_and_size.template get<1>();
