@@ -49,6 +49,16 @@ namespace stz
     {}
 
     template<typename S>
+    inline const_array_ptr(const std::pair<T*, S> &values_and_size) :
+      array_ptr<const T>(values_and_size.first, values_and_size.second)
+    {}
+
+    template<typename S>
+    inline const_array_ptr(const std::pair<const T*, S> &values_and_size) :
+      array_ptr<const T>(values_and_size)
+    {}
+
+    template<typename S>
     inline const_array_ptr(const boost::tuple<T*, S> &values_and_size) :
       array_ptr<const T>(values_and_size.template get<0>(),
                          values_and_size.template get<1>())
@@ -80,6 +90,19 @@ namespace stz
     inline void reset(const boost::array<T, SIZE> &values)
     {
       this->array_ptr<const T>::reset(values.data(), SIZE);
+    }
+
+    template<typename S>
+    inline void reset(const std::pair<T*, S> &values_and_size)
+    {
+      this->array_ptr<const T>::reset
+        (values_and_size.first, values_and_size.second);
+    }
+
+    template<typename S>
+    inline void reset(const std::pair<const T*, S> &values_and_size)
+    {
+      this->array_ptr<const T>::reset(values_and_size);
     }
 
     template<typename S>

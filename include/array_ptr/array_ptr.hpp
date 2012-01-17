@@ -67,6 +67,11 @@ namespace stz
     {}
 
     template<typename S>
+    inline array_ptr(const std::pair<T*, S> &values_and_size) :
+      values(values_and_size.first), _size(values_and_size.second)
+    {}
+
+    template<typename S>
     inline array_ptr(const boost::tuple<T*, S> &values_and_size) :
       values(values_and_size.template get<0>()),
       _size(values_and_size.template get<1>())
@@ -94,6 +99,13 @@ namespace stz
     {
       this->values = values.c_array();
       this->_size = SIZE;
+    }
+
+    template<typename S>
+    inline void reset(const std::pair<T*, S> &values_and_size)
+    {
+      this->values = values_and_size.first;
+      this->_size = values_and_size.second;
     }
 
     template<typename S>
