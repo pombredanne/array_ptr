@@ -50,7 +50,7 @@ namespace stz
       _size(size)
     {}
 
-    inline array_ptr(array_ptr<T> &values) :
+    inline array_ptr(const array_ptr<T> &values) :
       values(values.values),
       _size(values._size)
     {}
