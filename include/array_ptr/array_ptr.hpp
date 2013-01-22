@@ -179,7 +179,29 @@ namespace stz
     {
       return const_iterator(this->values + this->_size);
     }
+
+    template<typename SEP>
+    inline std::ostream& out(std::ostream &out, const SEP &separator) const
+    {
+      bool is_first = true;
+      for (const T &value : *this)
+        (is_first ? (is_first = false, out) : (out << separator)) << value;
+
+      return out;
+    }
+
+    inline std::ostream& out(std::ostream &out) const
+    {
+      return this->out(out, ' ');
+    }
   };
+}
+
+template<typename T>
+inline std::ostream& operator<<
+(std::ostream &out, const stz::array_ptr<T> &array)
+{
+  return array.out(out);
 }
 
 #endif

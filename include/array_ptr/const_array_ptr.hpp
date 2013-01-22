@@ -121,4 +121,12 @@ namespace stz
   };
 }
 
+template<typename T>
+inline std::ostream&
+operator<<(std::ostream &out, const stz::const_array_ptr<T> &array)
+{
+  return operator<<
+    (out, static_cast<const stz::array_ptr<const T>&>(array));
+}
+
 #endif
