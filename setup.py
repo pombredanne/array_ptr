@@ -1,19 +1,48 @@
 import sys
 import os
+
+from itertools import chain
+
 from distutils.core import setup
 
+# The setup_requires list
 REQUIRES = [
   'path.py',
   ]
+# pip uses setuptools uses easy_install
+# for installing setup_requires packages,
+# which are bdist_egg'd and installed to ./*.egg/ dirs...
+for name in os.listdir('.'):
+    if name.endswith('.egg'):
+        path = os.path.abspath(name)
+        sys.path.insert(0, path)
+        try:
+            PYTHONPATH = os.pathsep.join((path, os.environ['PYTHONPATH']))
+        except KeyError:
+            PYTHONPATH = path
+        os.environ['PYTHONPATH'] = PYTHONPATH
 
 VERSION = open('VERSION').read().strip()
 
+PACKAGE_DIR = '.'
+# Gets the header files if building an egg
+PACKAGE_DATA = []
+
+# Gets the header files for installing to sys.prefix
+# if doing normal build/install
 DATA_FILES = []
 
-if any(cmd in sys.argv for cmd in ('build', 'install')):
+# Create data file lists if some build/install cmd was given
+if any(cmd in sys.argv for cmd in ('build', 'install', 'bdist_egg')):
     from path import path as Path
 
-    PREFIX = Path(sys.prefix).abspath()
+    PACKAGE_DIR = Path(PACKAGE_DIR)
+
+    if not 'bdist_egg' in sys.argv:
+        PREFIX = Path(sys.prefix).abspath()
+        with open('PREFIX', 'w') as f:
+            f.write(PREFIX)
+        PACKAGE_DATA.append('PREFIX')
 
     INCLUDE_FILES = []
     with Path('include'):
@@ -26,10 +55,18 @@ if any(cmd in sys.argv for cmd in ('build', 'install')):
             if filepaths:
                 INCLUDE_FILES.append((dirpath, filepaths))
 
-    DATA_FILES.extend(
-      (PREFIX.joinpath('include', dirpath), filenames)
-      for dirpath, filenames in INCLUDE_FILES)
+    if not 'bdist_egg' in sys.argv:
+        # Install headers as data_files to sys.prefix
+        for dirpath, filepaths in INCLUDE_FILES:
+            DATA_FILES.append(
+              (PREFIX.joinpath('include', dirpath), filepaths))
+    else:
+        # Install headers as package_data
+        for dirpath, filepaths in INCLUDE_FILES:
+            for path in filepaths:
+                PACKAGE_DATA.append(PACKAGE_DIR.relpathto(path))
 
+print(PACKAGE_DATA)
 setup(
   name='libarray_ptr',
   version=VERSION,
@@ -46,6 +83,17 @@ setup(
   license='LGPLv3',
 
   setup_requires=REQUIRES,
+  install_requires=REQUIRES,
+
+  package_dir={
+    'libarray_ptr': PACKAGE_DIR,
+    },
+  packages=[
+    'libarray_ptr',
+    ],
+  package_data={
+    'libarray_ptr': PACKAGE_DATA,
+    },
 
   data_files=DATA_FILES,
   )
