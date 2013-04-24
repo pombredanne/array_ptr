@@ -39,10 +39,10 @@ if any(cmd in sys.argv for cmd in ('build', 'install', 'bdist_egg')):
     PACKAGE_DIR = Path(PACKAGE_DIR)
 
     if not 'bdist_egg' in sys.argv:
+        PREFIX = Path(sys.prefix).abspath()
         # Store sys.prefix location (where data_files are installed)
         # as part of package_data.
-        # Can later be accessed with libarray_ptr.PREFIX
-        PREFIX = Path(sys.prefix).abspath()
+        # Can later be accessed with libcarefree_objects.PREFIX
         with open('PREFIX', 'w') as f:
             f.write(PREFIX)
         PACKAGE_DATA.append('PREFIX')
