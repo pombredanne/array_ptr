@@ -19,10 +19,15 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with array_ptr.  If not, see <http://www.gnu.org/licenses/>.
 
+"""libarray_ptr
+
+.. moduleauthor:: Stefan Zimmermann <zimmermann.code@gmail.com>
+"""
 __all__ = 'PREFIX', 'INCLUDE_PATH',
 
 from path import path as Path
 
+# Determine the location prefix of libarray_ptr's data_files
 PREFIX = Path(__path__[0])
 with PREFIX:
     if Path('PREFIX').exists():
