@@ -4,7 +4,7 @@
  * with stl container functionality
  * and support for std::vector and boost::array
  *
- * Copyright (C) 2011 Stefan Zimmermann <zimmermann.code@googlemail.com>
+ * Copyright (C) 2011-2013 Stefan Zimmermann <zimmermann.code@gmail.com>
  *
  * array_ptr is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
