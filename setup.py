@@ -69,7 +69,6 @@ if any(cmd in sys.argv for cmd in ('build', 'install', 'bdist_egg')):
             for path in filepaths:
                 PACKAGE_DATA.append(PACKAGE_DIR.relpathto(path))
 
-print(PACKAGE_DATA)
 setup(
   name='libarray_ptr',
   version=VERSION,
