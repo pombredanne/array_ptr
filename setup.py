@@ -15,8 +15,8 @@ REQUIRES = open('requirements.txt').read().strip().split('\n')
 VERSION = open('VERSION').read().strip()
 
 PACKAGE_DIR = '.'
-# Gets the header files if building an egg
-PACKAGE_DATA = []
+# Also gets the header files if building an egg
+PACKAGE_DATA = ['VERSION', 'requirements.txt']
 
 # Gets the header files for installing to sys.prefix
 # if doing normal build/install

@@ -25,16 +25,24 @@
 """
 __all__ = ['PREFIX', 'INCLUDE_PATH']
 
+from pkg_resources import parse_requirements
+
 from path import path as Path
 
-from .libarray_ptr import __version__, __requires__
 
+PREFIX = Path(__file__).abspath().dirname()
 
-# Determine the location prefix of libarray_ptr's data_files
-PREFIX = Path(__path__[0])
 with PREFIX:
-    if Path('PREFIX').exists():
-        with Path('PREFIX').open() as f:
-            PREFIX = Path(f.read().strip())
+    __version__ = open('VERSION').read().strip()
+
+    __requires__ = []
+    with open('requirements.txt') as f:
+        for req in f.readlines():
+            req = req.strip()
+            if req:
+                __requires__.append(req)
+    del f, req
+
+    __requires__ = list(parse_requirements(__requires__))
 
 INCLUDE_PATH = PREFIX / 'include'
