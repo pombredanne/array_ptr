@@ -44,6 +44,11 @@ namespace stz
     {}
 
     template<std::size_t SIZE>
+    inline const_array_ptr(const std::array<T, SIZE> &values) :
+      array_ptr<const T>(values.data(), SIZE)
+    {}
+
+    template<std::size_t SIZE>
     inline const_array_ptr(const boost::array<T, SIZE> &values) :
       array_ptr<const T>(values.data(), SIZE)
     {}

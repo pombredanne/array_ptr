@@ -25,6 +25,7 @@
 
 #include <cstdlib>
 
+#include <array>
 #include <vector>
 
 #include <boost/array.hpp>
@@ -58,6 +59,12 @@ namespace stz
     inline array_ptr(std::vector<T> &values) :
       values(&values[0]),
       _size(values.size())
+    {}
+
+    template<std::size_t SIZE>
+    inline array_ptr(std::array<T, SIZE> &values) :
+      values(values.c_array()),
+      _size(SIZE)
     {}
 
     template<std::size_t SIZE>
