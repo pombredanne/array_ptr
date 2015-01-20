@@ -1,0 +1,14 @@
+[libarray_ptr]
+
+description =
+    A simple C-style-array ptr/size wrapper template for C++
+    with STL container functionality
+    and support for std::vector and std::array
+
+author = Stefan Zimmermann <zimmermann.code@gmail.com>
+url = http://bitbucket.org/StefanZimmermann/array_ptr
+
+license = LGPLv3
+
+setup hooks =
+    libarray_ptr:setup_keywords
