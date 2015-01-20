@@ -1,0 +1,13 @@
+~$
+\.pyc$
+
+\.diff$
+\.rej$
+
+^build/
+^dist/
+
+\.egg-info/
+\.egg/
+
+^\.tox/
