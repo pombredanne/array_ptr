@@ -25,9 +25,12 @@
 """
 __all__ = ['PREFIX', 'INCLUDE_PATH']
 
+import sys
+import os
+
 from pkg_resources import parse_requirements
 
-from path import path as Path
+from path import Path
 
 
 PREFIX = Path(__file__).abspath().dirname()
@@ -46,3 +49,53 @@ with PREFIX:
     __requires__ = list(parse_requirements(__requires__))
 
 INCLUDE_PATH = PREFIX / 'include'
+
+
+def setup_keywords(dist):
+    """Create data file lists and add to setup keywords.
+    """
+    PACKAGE = 'libarray_ptr'
+    PACKAGE_DIR = Path('.')
+    # Also gets the header files if building an egg
+    PACKAGE_DATA = ['VERSION', 'requirements.txt']
+
+    # Gets the header files for installing to sys.prefix
+    # if doing normal build/install
+    DATA_FILES = []
+
+    if 'bdist_egg' not in sys.argv:
+        PREFIX = Path(sys.prefix).abspath()
+        # Store sys.prefix location (where data_files are installed)
+        # as part of package_data.
+        # Can later be accessed with libcarefree_objects.PREFIX
+        with open('PREFIX', 'w') as f:
+            f.write(PREFIX)
+        PACKAGE_DATA.append('PREFIX')
+
+    INCLUDE_FILES = []
+    with Path('include'):
+        for dirpath, dirnames, filenames in os.walk('.'):
+            abspath = Path(dirpath).abspath()
+            filepaths = []
+            for fn in filenames:
+                if Path(fn).ext == '.hpp':
+                    filepaths.append(abspath.joinpath(fn))
+            if filepaths:
+                INCLUDE_FILES.append((dirpath, filepaths))
+
+    if 'bdist_egg' not in sys.argv:
+        # Install headers as data_files to sys.prefix
+        for dirpath, filepaths in INCLUDE_FILES:
+            DATA_FILES.append(
+              (PREFIX.joinpath('include', dirpath), filepaths))
+    else:
+        # Install headers as package_data
+        for dirpath, filepaths in INCLUDE_FILES:
+            for path in filepaths:
+                PACKAGE_DATA.append(PACKAGE_DIR.relpathto(path))
+
+    dist.packages += [PACKAGE]
+    dist.package_dir[PACKAGE] = PACKAGE_DIR
+
+    dist.package_data = {PACKAGE: PACKAGE_DATA}
+    dist.data_files = DATA_FILES
